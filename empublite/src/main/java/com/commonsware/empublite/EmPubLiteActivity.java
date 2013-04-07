@@ -23,6 +23,7 @@ public class EmPubLiteActivity extends SherlockFragmentActivity {
         getSupportFragmentManager().beginTransaction().add(new ModelFragment(), MODEL).commit();
     }
     pager=(ViewPager)findViewById(R.id.pager);
+    getSupportActionBar().setHomeButtonEnabled(true);
   }
 
   @Override
@@ -35,6 +36,7 @@ public class EmPubLiteActivity extends SherlockFragmentActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case android.R.id.home:
+        pager.setCurrentItem(0, false);
         return(true);
         
       case R.id.about:
