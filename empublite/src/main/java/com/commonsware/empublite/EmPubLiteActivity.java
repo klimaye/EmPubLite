@@ -12,17 +12,17 @@ import com.actionbarsherlock.view.MenuItem;
 public class EmPubLiteActivity extends SherlockFragmentActivity {
   private ViewPager pager=null;
   private ContentsAdapter adapter=null;
-  
+    private static final String MODEL="model";
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
-    
+
+    if (getSupportFragmentManager().findFragmentByTag(MODEL) == null) {
+        getSupportFragmentManager().beginTransaction().add(new ModelFragment(), MODEL).commit();
+    }
     pager=(ViewPager)findViewById(R.id.pager);
-    adapter=new ContentsAdapter(this);
-    pager.setAdapter(adapter);
-    findViewById(R.id.progressBar1).setVisibility(View.GONE);
-    findViewById(R.id.pager).setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -57,5 +57,12 @@ public class EmPubLiteActivity extends SherlockFragmentActivity {
     }
     
     return(super.onOptionsItemSelected(item));
+  }
+
+  public void setupPager(BookContents contents) {
+      adapter=new ContentsAdapter(this, contents);
+      pager.setAdapter(adapter);
+      findViewById(R.id.progressBar1).setVisibility(View.GONE);
+      findViewById(R.id.pager).setVisibility(View.VISIBLE);
   }
 }
