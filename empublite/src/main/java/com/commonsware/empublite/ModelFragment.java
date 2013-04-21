@@ -2,9 +2,11 @@ package com.commonsware.empublite;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -26,6 +28,27 @@ public class ModelFragment extends SherlockFragment {
     private BookContents contents = null;
     private ContentsLoadTask contentsTask = null;
 
+    private SharedPreferences prefs = null;
+    private PrefsLoadTask prefsTask = null;
+
+    private class PrefsLoadTask extends AsyncTask<Context, Void, Void> {
+        SharedPreferences localPreferences = null;
+        @Override
+        protected Void doInBackground(Context... ctxt) {
+            localPreferences = PreferenceManager.getDefaultSharedPreferences(ctxt[0]);
+            localPreferences.getAll();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            ModelFragment.this.prefs = localPreferences;
+            ModelFragment.this.prefsTask = null;
+            Log.e("empublite", "about to deliver model");
+            deliverModel();
+        }
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
@@ -35,10 +58,17 @@ public class ModelFragment extends SherlockFragment {
 
     synchronized private void deliverModel() {
 
-        if (contents != null) {
-            ((EmPubLiteActivity)getActivity()).setupPager(contents);
+        if (prefs != null && contents != null) {
+            Log.e("empublite", "setupPager");
+            ((EmPubLiteActivity)getActivity()).setupPager(prefs, contents);
         }
         else {
+            if (prefs == null && prefsTask == null) {
+                prefsTask = new PrefsLoadTask();
+                Log.e("empublite", "about to execute async task");
+                executeAsyncTask(prefsTask,getActivity().getApplicationContext());
+            }
+
             if (contents == null && contentsTask == null) {
                 contentsTask = new ContentsLoadTask();
                 executeAsyncTask(contentsTask, getActivity().getApplicationContext());
