@@ -2,11 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>playandroid-parent</artifactId>
-        <groupId>com.praeses.playandroid</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
     <groupId>com.commonsware.empublite</groupId>
     <artifactId>empublite-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -53,7 +48,7 @@
                 <plugin>
                     <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                     <artifactId>android-maven-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.6.0</version>
                     <inherited>true</inherited>
                     <configuration>
                         <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
@@ -135,7 +130,7 @@
                     <plugin>
                         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                         <artifactId>android-maven-plugin</artifactId>
-                        <version>${android-plugin}</version>
+                        <version>3.6.0</version>
                         <configuration>
                             <release>true</release>
                         </configuration>
