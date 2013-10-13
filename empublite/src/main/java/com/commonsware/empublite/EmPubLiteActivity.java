@@ -10,6 +10,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.commonsware.empublite.activities.NoteActivity;
 
 public class EmPubLiteActivity extends SherlockFragmentActivity {
     private ViewPager pager = null;
@@ -63,7 +64,11 @@ public class EmPubLiteActivity extends SherlockFragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
+            case R.id.notes:
+                Intent i = new Intent(this, NoteActivity.class);
+                i.putExtra(NoteActivity.EXTRA_POSITION, pager.getCurrentItem());
+                startActivity(i);
+                return true;
             case R.id.settings:
                 startActivity(new Intent(this, Preferences.class));
                 return true;
@@ -72,21 +77,17 @@ public class EmPubLiteActivity extends SherlockFragmentActivity {
                 return (true);
 
             case R.id.about:
-                Intent i = new Intent(this, SimpleContentActivity.class);
-
+                i = new Intent(this, SimpleContentActivity.class);
                 i.putExtra(SimpleContentActivity.EXTRA_FILE,
                         "file:///android_asset/misc/about.html");
                 startActivity(i);
-
                 return (true);
 
             case R.id.help:
                 i = new Intent(this, SimpleContentActivity.class);
                 i.putExtra(SimpleContentActivity.EXTRA_FILE,
                         "file:///android_asset/misc/help.html");
-
                 startActivity(i);
-
                 return (true);
         }
 
