@@ -1,6 +1,7 @@
 package com.commonsware.empublite.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class NoteFragment extends SherlockFragment implements DatabaseHelper.Not
         int position = getArguments().getInt(KEY_POSITION);
         editor = (EditText)result.findViewById(R.id.editor);
         DatabaseHelper.getInstance(getActivity()).getNoteAync(position, this);
+        Log.e("empublite","notefragment end of onCreateView");
         return result;
     }
 
@@ -47,7 +49,9 @@ public class NoteFragment extends SherlockFragment implements DatabaseHelper.Not
 
     @Override
     public void onPause() {
-        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
+        Log.e("empublite", "notefragment onPause called");
+        super.onPause();
+        Log.e("empublite","notefragment after super.onPause");
         int position = getArguments().getInt(KEY_POSITION,-1);
         DatabaseHelper.getInstance(getActivity()).saveNoteAync(position, editor.getText().toString());
     }

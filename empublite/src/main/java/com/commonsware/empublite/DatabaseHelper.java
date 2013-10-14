@@ -1,10 +1,12 @@
 package com.commonsware.empublite;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * Created with IntelliJ IDEA.
@@ -71,13 +73,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         @Override
         protected Void doInBackground(Void... voids) {
             String[] args = {String.valueOf(position), prose};
+            Log.e("empublite", "saveNoteAsync - about to insert or replace note at " + position + " with " + prose);
+            ContentValues cv = new ContentValues();
+            cv.put("position", position);
+            cv.put("prose", prose);
             getWritableDatabase()
-                    .execSQL("INSERT OR REPLACE INTO notes (position, prose) values (?,?)", args);
+                    .replace("notes", null, cv);
+                    //.execSQL("INSERT OR REPLACE INTO notes (position, prose) values (?,?)", args);
+            Log.e("empublite", "saveNoteAsync - after insert or replace");
             return null;
         }
     }
 
     public void saveNoteAync(int position, String prose) {
+        Log.e("empublite", "inside saveNoteAsync");
         ModelFragment.executeAsyncTask(new SaveNoteTask(position, prose));
     }
 
@@ -97,7 +106,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         try {
             sqLiteDatabase.beginTransaction();
-            sqLiteDatabase.execSQL("CREATE TABLE notes (position INTEGER PRIMARY_KEY, prose TEXT)");
+            sqLiteDatabase.execSQL("CREATE TABLE notes (position INTEGER PRIMARY KEY, prose TEXT)");
+            //sqLiteDatabase.execSQL("CREATE UNIQUE INDEX idx_position ON notes (position)");
             sqLiteDatabase.setTransactionSuccessful();
         }
         finally {

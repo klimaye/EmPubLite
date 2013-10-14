@@ -26,10 +26,10 @@ public class EmPubLiteActivity extends SherlockFragmentActivity {
     protected void onPause() {
         if (prefs != null) {
             int position = pager.getCurrentItem();
-            Log.e("empublite", "on pause about to save current position " + position);
+            //Log.e("empublite", "empubliteactivity - on pause : about to save current position " + position);
             prefs.edit().putInt(PREF_LAST_POSITION, position).apply();
         } else {
-            Log.e("empublite", "prefs are null");
+            //Log.e("empublite", "prefs are null");
         }
         super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
     }
