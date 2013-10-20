@@ -33,6 +33,10 @@
 		</activity>
         <activity android:name=".Preferences"/>
         <activity android:name=".activities.NoteActivity"/>
+        <provider
+            android:name=".providers.NotesProvider"
+            android:authorities="com.commonsware.empublite.providers.NotesProvider"
+            android:exported="false" />
     </application>
 
 </manifest>

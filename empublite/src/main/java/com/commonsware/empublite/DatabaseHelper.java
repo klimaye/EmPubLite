@@ -1,12 +1,8 @@
 package com.commonsware.empublite;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
-import android.util.Log;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,71 +22,71 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         void setNote(String note);
     }
 
-    private class GetNoteTask extends AsyncTask<Integer, Void, String> {
+//    private class GetNoteTask extends AsyncTask<Integer, Void, String> {
+//
+//        private NoteListener listener;
+//
+//        GetNoteTask(NoteListener listener) {
+//            this.listener = listener;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Integer... integers) {
+//            String[] _ids = new String[] {integers[0].toString()};
+//
+//            Cursor c =
+//                getReadableDatabase().rawQuery("SELECT prose from notes where _id=?",_ids);
+//            c.moveToFirst();
+//            if (c.isAfterLast()) {
+//                return null;
+//            }
+//            String result = c.getString(0);
+//            c.close();
+//
+//            return result;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String prose) {
+//            listener.setNote(prose);
+//        }
+//    }
+//
+//    public void getNoteAync(int _id, NoteListener listener) {
+//        ModelFragment.executeAsyncTask(new GetNoteTask(listener), _id);
+//    }
 
-        private NoteListener listener;
+//    private class SaveNoteTask extends AsyncTask<Void, Void, Void> {
+//
+//        private int _id;
+//        private String prose;
+//
+//        private SaveNoteTask(int _id, String prose) {
+//            this._id = _id;
+//            this.prose = prose;
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            String[] args = {String.valueOf(_id), prose};
+//            Log.e("empublite", "saveNoteAsync - about to insert or replace note at " + _id + " with " + prose);
+//            ContentValues cv = new ContentValues();
+//            cv.put("_id", _id);
+//            cv.put("prose", prose);
+//            getWritableDatabase()
+//                    .replace("notes", null, cv);
+//                    //.execSQL("INSERT OR REPLACE INTO notes (_id, prose) values (?,?)", args);
+//            Log.e("empublite", "saveNoteAsync - after insert or replace");
+//            return null;
+//        }
+//    }
 
-        GetNoteTask(NoteListener listener) {
-            this.listener = listener;
-        }
+//    public void saveNoteAync(int _id, String prose) {
+//        Log.e("empublite", "inside saveNoteAsync");
+//        ModelFragment.executeAsyncTask(new SaveNoteTask(_id, prose));
+//    }
 
-        @Override
-        protected String doInBackground(Integer... integers) {
-            String[] positions = new String[] {integers[0].toString()};
-
-            Cursor c =
-                getReadableDatabase().rawQuery("SELECT prose from notes where position=?",positions);
-            c.moveToFirst();
-            if (c.isAfterLast()) {
-                return null;
-            }
-            String result = c.getString(0);
-            c.close();
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String prose) {
-            listener.setNote(prose);
-        }
-    }
-
-    public void getNoteAync(int position, NoteListener listener) {
-        ModelFragment.executeAsyncTask(new GetNoteTask(listener), position);
-    }
-
-    private class SaveNoteTask extends AsyncTask<Void, Void, Void> {
-
-        private int position;
-        private String prose;
-
-        private SaveNoteTask(int position, String prose) {
-            this.position = position;
-            this.prose = prose;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            String[] args = {String.valueOf(position), prose};
-            Log.e("empublite", "saveNoteAsync - about to insert or replace note at " + position + " with " + prose);
-            ContentValues cv = new ContentValues();
-            cv.put("position", position);
-            cv.put("prose", prose);
-            getWritableDatabase()
-                    .replace("notes", null, cv);
-                    //.execSQL("INSERT OR REPLACE INTO notes (position, prose) values (?,?)", args);
-            Log.e("empublite", "saveNoteAsync - after insert or replace");
-            return null;
-        }
-    }
-
-    public void saveNoteAync(int position, String prose) {
-        Log.e("empublite", "inside saveNoteAsync");
-        ModelFragment.executeAsyncTask(new SaveNoteTask(position, prose));
-    }
-
-    private DatabaseHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, SCHEMA_VERSION);
         this.context = context;
     }
@@ -106,8 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         try {
             sqLiteDatabase.beginTransaction();
-            sqLiteDatabase.execSQL("CREATE TABLE notes (position INTEGER PRIMARY KEY, prose TEXT)");
-            //sqLiteDatabase.execSQL("CREATE UNIQUE INDEX idx_position ON notes (position)");
+            sqLiteDatabase.execSQL("CREATE TABLE notes (_id INTEGER PRIMARY KEY, position INTEGER, prose TEXT)");
             sqLiteDatabase.setTransactionSuccessful();
         }
         finally {
